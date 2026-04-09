@@ -11,6 +11,29 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Initialize Neo4j once
+let neo4jInitialized = false;
+
+// Middleware to ensure Neo4j is initialized before handling requests
+app.use(async (req, res, next) => {
+  if (!neo4jInitialized && process.env.NODE_ENV === 'production') {
+    try {
+      console.log('🚀 Initializing Neo4j for serverless...');
+      await initializeNeo4j();
+      await createConstraints();
+      initializeEmail();
+      console.log('✅ Neo4j connected successfully');
+      console.log('✅ Database constraints and indexes created');
+      console.log('✅ Email service initialized');
+      neo4jInitialized = true;
+    } catch (error) {
+      console.error('❌ Failed to initialize:', error.message);
+      return res.status(500).json({ message: 'Service unavailable' });
+    }
+  }
+  next();
+});
+
 // Middleware
 app.use(
   cors({
@@ -49,22 +72,18 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Initialize and start server
+// Initialize and start server (local development only)
 const startServer = async () => {
   try {
-    console.log('🚀 Starting KaliWebApp Backend...\n');
+    if (!neo4jInitialized) {
+      console.log('🚀 Starting KaliWebApp Backend...\n');
+      await initializeNeo4j();
+      await createConstraints();
+      initializeEmail();
+      console.log('✅ Email service initialized');
+      neo4jInitialized = true;
+    }
 
-    // Connect to Neo4j
-    await initializeNeo4j();
-
-    // Create database constraints
-    await createConstraints();
-
-    // Initialize email service
-    initializeEmail();
-    console.log('✅ Email service initialized');
-
-    // Start server
     app.listen(PORT, () => {
       console.log(`\n✨ Server is running on http://localhost:${PORT}`);
       console.log(`📧 Frontend URL: ${process.env.FRONTEND_URL}`);
@@ -83,4 +102,10 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// Only start locally
+if (process.env.NODE_ENV !== 'production') {
+  startServer();
+}
+
+// Export for Vercel
+export default app;
