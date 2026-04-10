@@ -3,11 +3,13 @@
 ## 🚀 Start Everything in Correct Order
 
 ### Terminal 1: Start Neo4j (if using Docker)
+
 ```bash
 docker-compose up -d neo4j
 ```
 
 Wait 10 seconds, then verify:
+
 ```bash
 curl http://localhost:7474/
 ```
@@ -15,6 +17,7 @@ curl http://localhost:7474/
 ---
 
 ### Terminal 2: Start Backend Server
+
 ```bash
 cd backend
 npm install  # Only needed first time
@@ -22,6 +25,7 @@ npm run dev
 ```
 
 **You should see:**
+
 ```
 ✅ Neo4j connected successfully
 ✅ Email service initialized
@@ -31,11 +35,13 @@ npm run dev
 ---
 
 ### Terminal 3: Start Frontend
+
 ```bash
 npm run dev
 ```
 
 **You should see:**
+
 ```
 VITE v7.1.2  ready in XXXms
 ➜ Local: http://localhost:5173/
@@ -46,16 +52,19 @@ VITE v7.1.2  ready in XXXms
 ## ✅ Verify Everything is Running
 
 ### Check Backend Health
+
 ```bash
 curl http://localhost:5000/api/health
 ```
 
 Should return:
+
 ```json
-{"status":"Backend is running","timestamp":"2024-01-15T10:30:00Z"}
+{ "status": "Backend is running", "timestamp": "2024-01-15T10:30:00Z" }
 ```
 
 ### Check Neo4j
+
 ```bash
 curl http://localhost:7474/
 ```
@@ -63,6 +72,7 @@ curl http://localhost:7474/
 Should return HTML (no error)
 
 ### Open Frontend
+
 Open browser and go to: http://localhost:5173
 
 ---
@@ -70,6 +80,7 @@ Open browser and go to: http://localhost:5173
 ## 🆘 Troubleshooting Quick Fixes
 
 ### Backend won't start - "Port 5000 already in use"
+
 ```bash
 # Linux/Mac:
 lsof -ti:5000 | xargs kill -9
@@ -82,6 +93,7 @@ PORT=5001
 ```
 
 ### Neo4j connection fails
+
 1. Check Neo4j is running:
    - Neo4j Desktop: Click Start
    - Docker: `docker-compose up -d neo4j`
@@ -94,6 +106,7 @@ PORT=5001
 3. Wait 15 seconds for Neo4j to fully start
 
 ### "Cannot find module" errors
+
 ```bash
 cd backend
 npm install
@@ -101,6 +114,7 @@ npm list  # Verify packages are installed
 ```
 
 ### Frontend shows "Network error"
+
 1. Make sure backend is running on Terminal 2
 2. Check backend logs for errors
 3. Try: `curl http://localhost:5000/api/health`
@@ -111,6 +125,7 @@ npm list  # Verify packages are installed
 ## 📝 Keep These Running
 
 Do NOT close any of the 3 terminals while working. You need:
+
 1. **Neo4j** (database) - Always running
 2. **Backend** (API server) - Always running
 3. **Frontend** (React dev server) - Always running

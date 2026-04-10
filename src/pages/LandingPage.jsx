@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { LogIn, UserPlus, ArrowRight } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import { LogIn, UserPlus, ArrowRight } from "lucide-react";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -11,14 +11,14 @@ const LandingPage = () => {
         <h1 className="text-3xl font-bold text-white">KaliWebApp</h1>
         <div className="flex gap-4">
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition"
           >
             <LogIn size={20} />
             Login
           </button>
           <button
-            onClick={() => navigate('/register')}
+            onClick={() => navigate("/register")}
             className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
           >
             <UserPlus size={20} />
@@ -36,7 +36,8 @@ const LandingPage = () => {
               Welcome to <span className="text-blue-400">KaliWebApp</span>
             </h2>
             <p className="text-xl text-gray-300">
-              Your gateway to an exclusive community of innovators, learners, and leaders
+              Your gateway to an exclusive community of innovators, learners,
+              and leaders
             </p>
           </div>
 
@@ -52,7 +53,9 @@ const LandingPage = () => {
 
             <div className="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 hover:border-blue-400 transition">
               <div className="text-4xl mb-4">👥</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Community</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Community
+              </h3>
               <p className="text-gray-300">
                 Connect with a vibrant community of members
               </p>
@@ -60,7 +63,9 @@ const LandingPage = () => {
 
             <div className="bg-white/10 backdrop-blur-lg p-6 rounded-lg border border-white/20 hover:border-blue-400 transition">
               <div className="text-4xl mb-4">🏆</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Achievements</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Achievements
+              </h3>
               <p className="text-gray-300">
                 Earn certificates and showcase your accomplishments
               </p>
@@ -69,20 +74,23 @@ const LandingPage = () => {
 
           {/* CTA Section */}
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 space-y-4">
-            <h3 className="text-2xl font-bold text-white">Ready to get started?</h3>
+            <h3 className="text-2xl font-bold text-white">
+              Ready to get started?
+            </h3>
             <p className="text-blue-100">
-              Join thousands of members and unlock exclusive content, events, and opportunities
+              Join thousands of members and unlock exclusive content, events,
+              and opportunities
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <button
-                onClick={() => navigate('/register')}
+                onClick={() => navigate("/register")}
                 className="flex items-center justify-center gap-2 bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
               >
                 Create Account
                 <ArrowRight size={20} />
               </button>
               <button
-                onClick={() => navigate('/login')}
+                onClick={() => navigate("/login")}
                 className="flex items-center justify-center gap-2 bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition"
               >
                 Already have an account?
@@ -93,7 +101,8 @@ const LandingPage = () => {
           {/* Footer Info */}
           <div className="pt-8 border-t border-gray-700">
             <p className="text-gray-400">
-              By signing in, you agree to our Terms of Service and Privacy Policy
+              By signing in, you agree to our Terms of Service and Privacy
+              Policy
             </p>
           </div>
         </div>

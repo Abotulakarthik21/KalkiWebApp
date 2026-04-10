@@ -1,7 +1,7 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
 
 const PublicRoute = ({ children }) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem("authToken");
 
   // If user is already logged in, redirect to home
   if (token) {

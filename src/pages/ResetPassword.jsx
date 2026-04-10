@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { authAPI } from "../utils/api";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -41,23 +42,10 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            password: formData.password,
-          }),
-        },
-      );
+      const result = await authAPI.resetPassword(token, formData.password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Password reset failed");
+      if (!result.success) {
+        setError(result.error || "Password reset failed");
         return;
       }
 

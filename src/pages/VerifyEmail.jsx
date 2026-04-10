@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { authAPI } from "../utils/api";
 
 const VerifyEmail = () => {
   const [searchParams] = useSearchParams();
@@ -18,18 +19,11 @@ const VerifyEmail = () => {
       }
 
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/auth/verify-email/${token}`,
-          {
-            method: "GET",
-          },
-        );
+        const result = await authAPI.verifyEmail(token);
 
-        const data = await response.json();
-
-        if (!response.ok) {
+        if (!result.success) {
           setStatus("error");
-          setMessage(data.message || "Verification failed");
+          setMessage(result.error || "Verification failed");
           return;
         }
 

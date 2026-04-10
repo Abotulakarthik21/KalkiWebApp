@@ -1,6 +1,7 @@
 # KaliWebApp - Complete Setup Checklist
 
-## ✅ Prerequisites  
+## ✅ Prerequisites
+
 - [ ] Node.js v18+ installed (`node --version`)
 - [ ] npm installed (`npm --version`)
 - [ ] Neo4j running (Docker or Desktop app)
@@ -12,19 +13,24 @@
 ## 📦 Backend Setup
 
 ### 1. Install Backend Dependencies
+
 ```bash
 cd backend
 npm install
 ```
+
 Check for errors. Should complete successfully.
 
 ### 2. Create Environment File
+
 ```bash
 cp .env.example .env
 ```
 
 ### 3. Edit `.env` File
+
 Update these values:
+
 ```env
 # REQUIRED - Change these!
 NEO4J_URI=bolt://localhost:7687
@@ -43,24 +49,29 @@ SMTP_PORT=587
 ```
 
 ### 4. Start Neo4j Database
+
 **Option A - Using Docker:**
+
 ```bash
 docker-compose up -d neo4j
 ```
 
 **Option B - Using Neo4j Desktop:**
+
 1. Open Neo4j Desktop app
 2. Find your database
 3. Click "Start"
 4. Wait for "Running" status
 
 ### 5. Test Backend Connection
+
 ```bash
 cd backend
 npm run dev
 ```
 
 **Expected output:**
+
 ```
 ✅ Neo4j connected successfully
 ✅ Email service initialized
@@ -68,6 +79,7 @@ npm run dev
 ```
 
 **To verify it's working:**
+
 - Open new terminal
 - Run: `curl http://localhost:5000/api/health`
 - Should return: `{"status":"Backend is running","timestamp":"..."}`
@@ -77,22 +89,26 @@ npm run dev
 ## 🎨 Frontend Setup
 
 ### 1. Install Frontend Dependencies
+
 ```bash
 cd KaliWebApp  # Root directory
 npm install
 ```
 
 ### 2. Check package.json exists
+
 ```bash
 ls -la package.json
 ```
 
 ### 3. Start Frontend Dev Server
+
 ```bash
 npm run dev
 ```
 
 **Expected output:**
+
 ```
 VITE v7.1.2  ready in 100ms
 
@@ -100,6 +116,7 @@ VITE v7.1.2  ready in 100ms
 ```
 
 ### 4. Open in Browser
+
 - Go to: `http://localhost:5173`
 - Should see login page
 - Open browser console (F12) for any errors
@@ -109,9 +126,11 @@ VITE v7.1.2  ready in 100ms
 ## 🧪 Testing the Full Flow
 
 ### Step 1: Check All Services Running
+
 Open 3 terminals and verify:
 
 **Terminal 1 (Neo4j):**
+
 ```bash
 docker ps | grep neo4j
 # Should show container running
@@ -124,6 +143,7 @@ Check the running terminal shows "Server is running on http://localhost:5000"
 Check the running terminal shows "Local: http://localhost:5173"
 
 ### Step 2: Test Backend
+
 ```bash
 curl http://localhost:5000/api/health
 ```
@@ -131,11 +151,13 @@ curl http://localhost:5000/api/health
 Should return JSON (not error).
 
 ### Step 3: Test Frontend
+
 1. Open http://localhost:5173 in browser
 2. Should show login page (no errors in console)
 3. Navbar should NOT be visible (not authenticated yet)
 
 ### Step 4: Test Registration
+
 1. Click "Sign Up" or "Register"
 2. Enter test data:
    - First Name: Test
@@ -146,17 +168,20 @@ Should return JSON (not error).
 3. Click Register
 
 **Check:**
+
 - ✅ No "Network error" - means backend is running
 - ✅ If no error, registration succeeded
 - ❌ If "Network error" appears - backend not running, see Troubleshooting below
 
 ### Step 5: Test Login
+
 1. Go to login page
 2. Enter email: test@example.com
 3. Enter password: Test1234
 4. Click Login
 
 **Check:**
+
 - ✅ Navbar appears (you're logged in)
 - ✅ You can see Home, Events, Members, Certification
 - ✅ Click Logout - navbar disappears, returns to login
@@ -170,18 +195,21 @@ Should return JSON (not error).
 **Root Cause:** Backend not running or not accessible
 
 **Solution:**
+
 1. Check Terminal 2 (where backend started)
    - Should show: "✨ Server is running on http://localhost:5000"
    - If not, backend crashed - look for error messages
-   
 2. Verify backend is accessible:
+
    ```bash
    curl http://localhost:5000/api/health
    ```
+
    - If this fails → backend is not running
    - If this works → connection issue
 
 3. Start backend:
+
    ```bash
    cd backend
    npm run dev
@@ -196,7 +224,9 @@ Should return JSON (not error).
 ### Problem: Neo4j Connection Failed
 
 **Solution:**
+
 1. Check Neo4j is running:
+
    ```bash
    docker ps | grep neo4j
    # OR check Neo4j Desktop
@@ -205,6 +235,7 @@ Should return JSON (not error).
 2. Wait 15 seconds for Neo4j to fully start
 
 3. Check credentials in `backend/.env`:
+
    ```env
    NEO4J_URI=bolt://localhost:7687
    NEO4J_USER=neo4j
@@ -219,6 +250,7 @@ Should return JSON (not error).
 ### Problem: Port Already in Use
 
 **Port 5000 (Backend):**
+
 ```bash
 # Linux/Mac:
 lsof -ti:5000 | xargs kill -9
@@ -231,6 +263,7 @@ PORT=5001
 ```
 
 **Port 5173 (Frontend):**
+
 ```bash
 # Linux/Mac:
 lsof -ti:5173 | xargs kill -9
@@ -311,6 +344,7 @@ curl http://localhost:5173
 ## 🚀 Success Indicators
 
 ✅ **Setup Complete If:**
+
 1. Frontend shows at http://localhost:5173
 2. Login page loads without network errors
 3. Can register new user without "Network error"

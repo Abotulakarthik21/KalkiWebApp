@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authAPI } from "../utils/api";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -15,25 +16,14 @@ const ForgotPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/forgot-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        },
-      );
+      const result = await authAPI.forgotPassword(email);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Request failed");
+      if (!result.success) {
+        setError(result.error || "Request failed");
         return;
       }
 
-      setSuccess(data.message);
+      setSuccess(result.data.message);
       setEmail("");
 
       setTimeout(() => {

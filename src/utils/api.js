@@ -1,5 +1,16 @@
 // API utility for frontend
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const rawApiUrl = import.meta.env.VITE_API_URL?.trim();
+const isLocalhost =
+  typeof window !== 'undefined' &&
+  ['localhost', '127.0.0.1'].includes(window.location.hostname);
+
+export const API_URL = rawApiUrl
+  ? rawApiUrl.replace(/\/+$/, '')
+  : isLocalhost
+    ? 'http://localhost:5000'
+    : '';
+
+export const API_BASE_URL = API_URL ? `${API_URL}/api` : '/api';
 
 export const apiCall = async (endpoint, options = {}) => {
   const token = localStorage.getItem('authToken');

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL, authAPI } from "../utils/api";
 
 const Login = ({ setIsAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -24,22 +25,15 @@ const Login = ({ setIsAuthenticated }) => {
     setLoading(true);
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const result = await authAPI.login(formData);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Login failed");
+      if (!result.success) {
+        setError(result.error || "Login failed");
         setLoading(false);
         return;
       }
+
+      const { data } = result;
 
       // Store token in localStorage
       localStorage.setItem("authToken", data.token);
@@ -50,8 +44,9 @@ const Login = ({ setIsAuthenticated }) => {
       navigate("/");
     } catch (err) {
       console.error("Login error:", err);
+      const backendUrl = API_URL || "this site's /api endpoint";
       setError(
-        `Network error: ${err.message}\n\n⚠️ Make sure the backend server is running on http://localhost:5000\n\nRun in terminal: cd backend && npm run dev`
+        `Network error: ${err.message}\n\nMake sure the backend is reachable at ${backendUrl}.`,
       );
       setLoading(false);
     }

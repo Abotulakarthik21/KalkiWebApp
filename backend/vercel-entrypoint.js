@@ -1,4 +1,3 @@
-import app from './api/index.js';
+import app from './app.js';
 
-// Vercel's serverless handler
 export default app;

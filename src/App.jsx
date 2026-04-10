@@ -1,21 +1,21 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Navbar from "./components/Navbar";
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 
 // Pages
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Events from "./pages/Events";
-import Members from "./pages/Members";
 import CertificateVerification from "./pages/CertificateVerification";
-import VerifyEmail from "./pages/VerifyEmail";
+import Events from "./pages/Events";
 import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
+import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import Members from "./pages/Members";
+import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -72,11 +72,7 @@ const App = () => {
           <Route
             path="/welcome"
             element={
-              !isAuthenticated ? (
-                <LandingPage />
-              ) : (
-                <Navigate to="/" replace />
-              )
+              !isAuthenticated ? <LandingPage /> : <Navigate to="/" replace />
             }
           />
 
@@ -117,12 +113,7 @@ const App = () => {
           {/* Catch all - redirect to home if authenticated, login if not */}
           <Route
             path="*"
-            element={
-              <Navigate
-                to={isAuthenticated ? "/" : "/login"}
-                replace
-              />
-            }
+            element={<Navigate to={isAuthenticated ? "/" : "/login"} replace />}
           />
         </Routes>
       </div>

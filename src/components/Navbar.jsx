@@ -1,4 +1,4 @@
-import { LogOut, User, Menu, X } from "lucide-react";
+import { LogOut, Menu, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import kalki from "../assets/logo.webp";

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL, authAPI } from "../utils/api";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -36,24 +37,15 @@ const Register = () => {
     }
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          password: formData.password,
-        }),
+      const result = await authAPI.register({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.message || "Registration failed");
+      if (!result.success) {
+        setError(result.error || "Registration failed");
         return;
       }
 
@@ -73,8 +65,9 @@ const Register = () => {
       }, 2000);
     } catch (err) {
       console.error("Registration error:", err);
+      const backendUrl = API_URL || "this site's /api endpoint";
       setError(
-        `Network error: ${err.message}\n\n⚠️ Make sure the backend server is running on http://localhost:5000\n\nRun in terminal: cd backend && npm run dev`
+        `Network error: ${err.message}\n\nMake sure the backend is reachable at ${backendUrl}.`,
       );
     } finally {
       setLoading(false);

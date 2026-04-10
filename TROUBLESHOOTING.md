@@ -17,11 +17,13 @@
 ### Step 1: Check if Backend is Running
 
 **In a terminal, run:**
+
 ```bash
 curl http://localhost:5000/api/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "Backend is running",
@@ -36,6 +38,7 @@ If this fails, continue with Steps 2-5.
 ### Step 2: Start Neo4j Database
 
 **Option A: Using Neo4j Desktop (Recommended)**
+
 1. Open Neo4j Desktop application
 2. Find your database project
 3. Click the **Start** button
@@ -43,11 +46,13 @@ If this fails, continue with Steps 2-5.
 5. Verify at http://localhost:7474/browser/
 
 **Option B: Using Docker**
+
 ```bash
 docker-compose up -d neo4j
 ```
 
 **Verify it's running:**
+
 ```bash
 curl http://localhost:7474/
 ```
@@ -57,17 +62,20 @@ curl http://localhost:7474/
 ### Step 3: Setup Backend Environment File
 
 **Check if `.env` exists in backend folder:**
+
 ```bash
 cd backend
 ls -la .env
 ```
 
 **If it doesn't exist, create it:**
+
 ```bash
 cp .env.example .env
 ```
 
 **Edit `.env` with your configuration:**
+
 ```env
 # Required - Update these values!
 NEO4J_URI=bolt://localhost:7687
@@ -93,11 +101,13 @@ EMAIL_FROM=noreply@kaliwebapp.com
 ### Step 4: Install Backend Dependencies
 
 **From the backend folder:**
+
 ```bash
 npm install
 ```
 
 **Verify installation:**
+
 ```bash
 npm list | grep -E "(express|neo4j|cors)"
 ```
@@ -107,11 +117,13 @@ npm list | grep -E "(express|neo4j|cors)"
 ### Step 5: Start Backend Server
 
 **Run the backend:**
+
 ```bash
 npm run dev
 ```
 
 **You should see:**
+
 ```
 ✅ Neo4j connected successfully
 ✅ Email service initialized
@@ -125,11 +137,13 @@ If you see **errors**, note them and continue to Step 6.
 ### Step 6: Start Frontend Server
 
 **In a new terminal, from root folder:**
+
 ```bash
 npm run dev
 ```
 
 **You should see:**
+
 ```
 VITE v7.1.2  ready in 123 ms
 ➜  Local:   http://localhost:5173/
@@ -140,9 +154,11 @@ VITE v7.1.2  ready in 123 ms
 ## 🔍 Common Issues & Fixes
 
 ### Issue: "Connection refused" on port 7687
+
 **Cause:** Neo4j not running
 
 **Fix:**
+
 ```bash
 # Neo4j Desktop: Click Start button
 # OR Docker:
@@ -151,9 +167,11 @@ docker logs neo4j  # Check status
 ```
 
 ### Issue: "Cannot find module 'express'"
+
 **Cause:** Dependencies not installed
 
 **Fix:**
+
 ```bash
 cd backend
 npm install
@@ -161,9 +179,11 @@ npm list express  # Verify it's installed
 ```
 
 ### Issue: "ENOENT: no such file or directory, open '.env'"
+
 **Cause:** .env file doesn't exist
 
 **Fix:**
+
 ```bash
 cd backend
 cp .env.example .env
@@ -171,9 +191,11 @@ cp .env.example .env
 ```
 
 ### Issue: "Neo4j connection failed: Invalid URI"
+
 **Cause:** Wrong NEO4J_URI in .env
 
 **Fix:**
+
 ```env
 # Check these values in your .env:
 NEO4J_URI=bolt://localhost:7687
@@ -182,6 +204,7 @@ NEO4J_PASSWORD=your-actual-password
 ```
 
 ### Issue: "CORS error" or "Failed to fetch"
+
 **Multiple causes:**
 
 1. **Backend not running:**
@@ -204,18 +227,21 @@ NEO4J_PASSWORD=your-actual-password
 Run these commands in separate terminals to verify everything:
 
 **Terminal 1 - Check Neo4j:**
+
 ```bash
 curl http://localhost:7474/
 # Should return HTML (not error)
 ```
 
 **Terminal 2 - Check Backend:**
+
 ```bash
 curl http://localhost:5000/api/health
 # Should return JSON response
 ```
 
 **Terminal 3 - Check Frontend:**
+
 ```bash
 # Open browser at http://localhost:5173
 # Should load without errors
@@ -258,6 +284,7 @@ npm run dev
    - Should show connection success messages
 
 2. **Neo4j logs**:
+
    ```bash
    docker logs neo4j
    ```
