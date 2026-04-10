@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize database and services once
 let initialized = false;
+let initError = null;
 
 const initializeServices = async () => {
   if (!initialized) {
@@ -32,19 +33,26 @@ const initializeServices = async () => {
       console.log('✅ Services initialized');
     } catch (error) {
       console.error('❌ Init error:', error.message);
-      throw error;
+      initError = error;
+      // Don't throw - continue with degraded service
     }
   }
 };
 
-// Initialization middleware
+// Start initialization in background (non-blocking)
+initializeServices().catch(err => {
+  console.error('Background init error:', err.message);
+});
+
+// Initialization middleware - non-blocking
 app.use(async (req, res, next) => {
-  try {
-    await initializeServices();
-    next();
-  } catch (error) {
-    res.status(500).json({ message: 'Service initialization failed', error: error.message });
+  // If not initialized yet, try to initialize (but don't wait)
+  if (!initialized) {
+    initializeServices().catch(err => {
+      console.error('Request init error:', err.message);
+    });
   }
+  next();
 });
 
 // API Routes
