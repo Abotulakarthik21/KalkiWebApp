@@ -2,14 +2,21 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/handler.js",
-      "use": "@vercel/node"
+      "src": "server.js",
+      "use": "@vercel/node",
+      "config": {
+        "maxLambdaSize": "50mb",
+        "nodeVersion": "18.x"
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/handler.js"
+      "dest": "server.js"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }

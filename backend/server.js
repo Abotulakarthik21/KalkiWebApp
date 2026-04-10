@@ -16,9 +16,9 @@ let neo4jInitialized = false;
 
 // Middleware to ensure Neo4j is initialized before handling requests
 app.use(async (req, res, next) => {
-  if (!neo4jInitialized && process.env.NODE_ENV === 'production') {
+  if (!neo4jInitialized) {
     try {
-      console.log('🚀 Initializing Neo4j for serverless...');
+      console.log('🚀 Initializing Neo4j...');
       await initializeNeo4j();
       await createConstraints();
       initializeEmail();
