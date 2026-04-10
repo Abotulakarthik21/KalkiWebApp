@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Initialize and start server (local development only)
+// Initialize and start server
 const startServer = async () => {
   try {
     if (!neo4jInitialized) {
@@ -84,11 +84,14 @@ const startServer = async () => {
       neo4jInitialized = true;
     }
 
-    app.listen(PORT, () => {
-      console.log(`\n✨ Server is running on http://localhost:${PORT}`);
-      console.log(`📧 Frontend URL: ${process.env.FRONTEND_URL}`);
-      console.log(`🗄️  Database: ${process.env.NEO4J_URI}`);
-    });
+    // Only listen if not in production (Vercel is serverless)
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => {
+        console.log(`\n✨ Server is running on http://localhost:${PORT}`);
+        console.log(`📧 Frontend URL: ${process.env.FRONTEND_URL}`);
+        console.log(`🗄️  Database: ${process.env.NEO4J_URI}`);
+      });
+    }
 
     // Graceful shutdown
     process.on('SIGINT', async () => {
@@ -98,14 +101,19 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);
-    process.exit(1);
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 };
 
-// Only start locally
-if (process.env.NODE_ENV !== 'production') {
-  startServer();
-}
+// Start server (both local and production)
+startServer().catch(err => {
+  console.error('Critical error:', err.message);
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
+});
 
 // Export for Vercel
 export default app;
