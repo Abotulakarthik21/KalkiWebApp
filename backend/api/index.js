@@ -1,8 +1,6 @@
 import cors from 'cors';
 import express from 'express';
 import dotenv from 'dotenv';
-import { initializeNeo4j, createConstraints } from '../config/database.js';
-import { initializeEmail } from '../config/emailService.js';
 import authRoutes from '../routes/authRoutes.js';
 import userRoutes from '../routes/userRoutes.js';
 
@@ -18,56 +16,19 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Initialize database and services once
-let initialized = false;
-let initError = null;
-
-const initializeServices = async () => {
-  if (!initialized) {
-    try {
-      console.log('🚀 Initializing backend services...');
-      await initializeNeo4j();
-      await createConstraints();
-      initializeEmail();
-      initialized = true;
-      console.log('✅ Services initialized');
-    } catch (error) {
-      console.error('❌ Init error:', error.message);
-      initError = error;
-      // Don't throw - continue with degraded service
-    }
-  }
-};
-
-// Start initialization in background (non-blocking)
-initializeServices().catch(err => {
-  console.error('Background init error:', err.message);
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'KaliWebApp Backend API', version: '1.0.0' });
 });
-
-// Initialization middleware - non-blocking
-app.use(async (req, res, next) => {
-  // If not initialized yet, try to initialize (but don't wait)
-  if (!initialized) {
-    initializeServices().catch(err => {
-      console.error('Request init error:', err.message);
-    });
-  }
-  next();
-});
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({ message: 'KaliWebApp Backend API', version: '1.0.0' });
-});
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // 404
 app.use((req, res) => {
